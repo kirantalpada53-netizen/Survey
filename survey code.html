@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFPRN Stakeholder Survey</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for Inter font and custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#059669', // Emerald Green
+                        'secondary': '#374151', // Dark Gray
+                        'accent': '#FCD34D', // Amber
+                        'background': '#F9FAFB', // Light Gray Background
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for professional appearance */
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .focus-ring {
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.5);
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #059669;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-background font-sans min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
+
+        <!-- Header -->
+        <header class="p-6 bg-primary text-white">
+            <h1 class="text-3xl font-bold mb-1">SFPRN Stakeholder Survey</h1>
+            <p class="text-primary-100 italic">Surplus Farm Produce Redistribution Network | Moose Jaw/Regina Study</p>
+        </header>
+
+        <!-- Description -->
+        <div class="p-6 border-b border-gray-100">
+            <p class="text-secondary text-lg">
+                Thank much for contributing to our Post-Graduate research on designing a sustainable supply chain innovation. Your insights are vital to addressing food waste and insecurity in our community.
+            </p></div>
+
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-gray-200">
+            <button id="farmer-tab"
+                class="tab-button flex-1 py-3 text-center text-lg font-semibold rounded-t-lg transition-colors duration-200 text-primary border-b-2 border-primary"
+                onclick="showTab('farmer-form')">
+                For Farmers
+            </button>
+            <button id="institution-tab"
+                class="tab-button flex-1 py-3 text-center text-lg font-semibold rounded-t-lg transition-colors duration-200 text-gray-500 hover:text-primary border-b-2 border-transparent"
+                onclick="showTab('institution-form')">
+                For Students
+            </button>
+        </div>
+
+        <!-- Form Container -->
+        <div class="p-6 sm:p-8">
+
+            <!-- Farmer Survey Form (INTEGRATED WITH FORMSPREE LOGIC) -->
+            <form id="farmer-form" class="tab-content active space-y-6">
+                <!-- IMPORTANT: Formspree endpoint will be set via JavaScript -->
+                <input type="hidden" name="_subject" value="SFPRN Farmer Survey Submission">
+
+                <h2 class="text-2xl font-bold text-secondary border-b pb-2 mb-4">Farmer Survey: Supply & Barriers</h2>
+
+                <!-- A. Basic Information -->
+                <div>
+                    <label for="farm-name" class="block text-sm font-bold text-gray-700 mb-1">Farm Name (Optional)</label>
+                    <input type="text" id="farm-name" name="farm-name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-3 focus:border-primary focus:ring focus-ring" placeholder="E.g., Sunrise Acres">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Primary Location of Farm</label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="location-farmer" value="Moose Jaw Region" class="form-radio h-4 w-4 text-primary focus:ring-primary" checked>
+                            <span class="ml-2 text-gray-700">Moose Jaw Region</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="location-farmer" value="Regina Region" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Regina Region</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="location-farmer" value="Other" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Other (Specify)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- B. Waste Volume & Type -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Approximately what percentage of your annual harvest (by weight or value) goes unsold or is discarded due to non-market reasons (e.g., cosmetic standards, overproduction)?
+                    </label>
+                    <select name="waste-percentage" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-3 focus:border-primary focus:ring focus-ring">
+                        <option value="0-5%">0 - 5%</option>
+                        <option value="6-10%">6 - 10%</option>
+                        <option value="11-15%">11 - 15%</option>
+                        <option value="16-20%">16 - 20%</option>
+                        <option value=">20%">Greater than 20%</option>
+                    </select>
+                </div>
+
+                <!-- C. Disposal Barriers -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Which of the following are the primary reasons you discard edible produce? (Select all that apply)
+                    </label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="barriers-farmer" value="Lack of transport" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Lack of affordable/timely transport for small loads</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="barriers-farmer" value="Lack of cold storage" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Lack of on-farm cold storage capacity</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="barriers-farmer" value="Too busy" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Too busy during harvest to coordinate donations</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="barriers-farmer" value="Cosmetic standards" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Stricter cosmetic or size standards</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="barriers-farmer" value="Other" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Other (Specify)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- D. Willingness & Logistics (Linear Scale) -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-3">
+                        If a free, scheduled pick-up service came to your farm once a week during peak harvest, how likely would you be to donate your surplus produce?
+                    </label>
+                    <div class="flex justify-between items-center text-center">
+                        <span class="text-sm text-gray-500">1 (Very Unlikely)</span>
+                        <div class="flex space-x-4">
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="likelihood" value="1" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">1</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="likelihood" value="2" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">2</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="likelihood" value="3" class="form-radio h-4 w-4 text-primary focus:ring-primary" checked>
+                                <span class="text-sm">3</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="likelihood" value="4" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">4</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="likelihood" value="5" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">5</span>
+                            </label>
+                        </div>
+                        <span class="text-sm text-gray-500">5 (Very Likely)</span>
+                    </div>
+                </div>
+
+                <!-- E. Digital Tool Use -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Would you be comfortable using a simple online form/tool (like a Google Form) to report your available surplus each week?
+                    </label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="digital-use" value="Yes" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Yes</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="digital-use" value="No" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">No</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="digital-use" value="Unsure" class="form-radio h-4 w-4 text-primary focus:ring-primary" checked>
+                            <span class="ml-2 text-gray-700">Only if it takes less than 5 minutes</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-primary text-white py-3 px-4 rounded-md font-semibold text-lg hover:bg-green-700 transition-colors duration-200 shadow-md flex items-center justify-center">
+                        Submit Farmer Survey
+                    </button>
+                </div>
+            </form>
+
+            <!-- Institution Survey Form (INTEGRATED WITH FORMSPREE LOGIC) -->
+            <form id="institution-form" class="tab-content space-y-6">
+                <!-- IMPORTANT: Formspree endpoint will be set via JavaScript -->
+                <input type="hidden" name="_subject" value="SFPRN Institution Survey Submission">
+
+                <h2 class="text-2xl font-bold text-secondary border-b pb-2 mb-4">Student Nutrition Survey: Needs & Logistics</h2>
+
+                <!-- NEW MULTIPLE CHOICE QUESTION -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Which of the following are the biggest challenges your program faces in providing fresh, healthy produce to students? (Select all that apply)
+                    </label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="program-challenges" value="Funding" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Lack of dedicated or sufficient funding</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="program-challenges" value="Reliability" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Reliability of current fresh produce suppliers/sources</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="program-challenges" value="Quality" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Difficulty sourcing high-quality, local produce</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="program-challenges" value="Storage" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Inadequate or limited refrigerated storage space</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="program-challenges" value="Variety" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Lack of seasonal variety in available produce</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="program-challenges" value="Waste Management" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Managing food waste (e.g., composting, disposal)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="program-challenges" value="Other" class="form-checkbox h-5 w-5 text-primary rounded focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Other (Specify in notes at the end)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- B. Produce Need (Student Focus) -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Frequency of Fresh Produce Shortages: How often does your program run low on fresh fruits or vegetables needed for student meals/snacks?
+                    </label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="produce-struggle" value="Daily" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Daily</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="produce-struggle" value="Weekly" class="form-radio h-4 w-4 text-primary focus:ring-primary" checked>
+                            <span class="ml-2 text-gray-700">Weekly</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="produce-struggle" value="Monthly" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Monthly</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="produce-struggle" value="Rarely" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Rarely/Never</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- C. Budget Impact (Student Focus) -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Fresh Produce Budget Share: What percentage of your student nutrition program budget is currently spent on purchasing fresh fruits and vegetables?
+                    </label>
+                    <select name="budget-impact" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-3 focus:border-primary focus:ring focus-ring">
+                        <option value="0-10%">0 - 10%</option>
+                        <option value="11-20%">11 - 20%</option>
+                        <option value="21-30%">21 - 30%</option>
+                        <option value=">30%">Greater than 30%</option>
+                    </select>
+                </div>
+
+                <!-- D. Logistics Requirements (Student Focus) -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        Refrigerated Storage Capacity: Does your kitchen/cafeteria facility have adequate refrigerated storage space to hold a weekly bulk delivery of fresh produce for 3-5 days?
+                    </label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="storage-capacity" value="Yes, always" class="form-radio h-4 w-4 text-primary focus:ring-primary" checked>
+                            <span class="ml-2 text-gray-700">Yes, always</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="storage-capacity" value="Usually" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">Usually, but sometimes challenging</span>
+                        </label>
+                        <label class="inline-flex items-center ml-4">
+                            <input type="radio" name="storage-capacity" value="No" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                            <span class="ml-2 text-gray-700">No, limited space</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- E. Preferred System (Student Focus) -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-3">
+                        Value of Reliable Delivery: How valuable would a reliable, scheduled weekly delivery of local surplus produce be in improving student nutrition and reducing program costs?
+                    </label>
+                    <div class="flex justify-between items-center text-center">
+                        <span class="text-sm text-gray-500">1 (Not Valuable)</span>
+                        <div class="flex space-x-4">
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="value-delivery" value="1" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">1</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="value-delivery" value="2" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">2</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="value-delivery" value="3" class="form-radio h-4 w-4 text-primary focus:ring-primary" checked>
+                                <span class="text-sm">3</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="value-delivery" value="4" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">4</span>
+                            </label>
+                            <label class="flex flex-col items-center">
+                                <input type="radio" name="value-delivery" value="5" class="form-radio h-4 w-4 text-primary focus:ring-primary">
+                                <span class="text-sm">5</span>
+                            </label>
+                        </div>
+                        <span class="text-sm text-gray-500">5 (Extremely Valuable)</span>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-primary text-white py-3 px-4 rounded-md font-semibold text-lg hover:bg-green-700 transition-colors duration-200 shadow-md flex items-center justify-center">
+                        Submit Program Survey
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- JavaScript to manage tabs and Formspree submission -->
+    <script>
+        // --- CONFIGURATION ---
+        // ✅ UPDATED WITH YOUR FORMSPREE ENDPOINT
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xjkqrrzj"; 
+        
+        // --- UI UTILITIES ---
+
+        function showTab(tabId) {
+            // Get all tab content elements and buttons
+            const contents = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-button');
+
+            // Deactivate all contents and buttons
+            contents.forEach(content => content.classList.remove('active'));
+            buttons.forEach(button => {
+                button.classList.remove('text-primary', 'border-primary');
+                button.classList.add('text-gray-500', 'hover:text-primary', 'border-transparent');
+            });
+
+            // Activate the selected content and button
+            document.getElementById(tabId).classList.add('active');
+            
+            let activeTabId = tabId === 'farmer-form' ? 'farmer-tab' : 'institution-tab';
+            const activeTab = document.getElementById(activeTabId);
+            
+            if (activeTab) {
+                activeTab.classList.add('text-primary', 'border-primary');
+                activeTab.classList.remove('text-gray-500', 'hover:text-primary', 'border-transparent');
+            }
+        }
+
+        // Simple message box replacement for alert()
+        function showMessage(message, title = 'Notification') {
+            const container = document.createElement('div');
+            container.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50';
+            container.innerHTML = `
+                <div class="bg-white rounded-lg p-6 shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-100">
+                    <h3 class="text-xl font-bold text-primary mb-3">${title}</h3>
+                    <p class="text-gray-700 mb-4">${message}</p>
+                    <button class="w-full bg-primary text-white py-2 rounded-md font-semibold hover:bg-green-700" onclick="document.body.removeChild(this.parentNode.parentNode)">Close</button>
+                </div>
+            `;
+            document.body.appendChild(container);
+        }
+
+        // --- FORMSPREE SUBMISSION LOGIC ---
+
+        function setupFormSubmission(formId, submitButtonText) {
+            const form = document.getElementById(formId);
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Get the submit button and its original text
+                const button = form.querySelector('button[type="submit"]');
+                const originalText = button.textContent;
+                
+                // Disable button and show loading state
+                button.disabled = true;
+                button.innerHTML = '<span class="loader mr-3"></span> Submitting...';
+
+                // We no longer need to check for the placeholder, as it's been updated.
+                // The check for the exact placeholder string is now removed for clean functionality.
+
+                const formData = new FormData(form);
+
+                try {
+                    // Start retry mechanism with exponential backoff
+                    let response;
+                    let retries = 0;
+                    const maxRetries = 3;
+
+                    while (retries < maxRetries) {
+                        try {
+                            response = await fetch(FORMSPREE_ENDPOINT, {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            // If successful, break the retry loop
+                            break; 
+                        } catch (error) {
+                            if (retries === maxRetries - 1) throw error; // Re-throw on last attempt
+                            const delay = Math.pow(2, retries) * 1000; // 1s, 2s, 4s delay
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            retries++;
+                        }
+                    }
+                    // End retry mechanism
+
+                    if (response.ok) {
+                        showMessage('Thank you! Your survey responses have been successfully recorded.', 'Survey Complete');
+                        form.reset(); // Clear the form fields upon success
+                    } else {
+                        const data = await response.json();
+                        let errorMessage = 'Submission failed. Please check your inputs.';
+                        if (data.errors && data.errors.length > 0) {
+                            errorMessage += '<br>Errors in: ' + data.errors.map(e => e.field).join(', ');
+                        }
+                        showMessage(errorMessage, 'Submission Error');
+                    }
+                } catch (error) {
+                    showMessage('A network error occurred. Please try again.', 'Connection Error');
+                } finally {
+                    // Restore button state
+                    button.disabled = false;
+                    button.textContent = originalText;
+                }
+            });
+        }
+
+        // Initialize submission handlers for both forms
+        setupFormSubmission('farmer-form', 'Submit Farmer Survey');
+        setupFormSubmission('institution-form', 'Submit Program Survey');
+
+    </script>
+</body>
+</html>
